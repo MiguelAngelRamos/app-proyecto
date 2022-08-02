@@ -21,13 +21,22 @@
         </li>
       </ul>
     </div>
+
+    <button @click="logout()">
+      logout
+    </button>
   </div>
 </nav>
 </template>
 
 <script>
 export default {
-
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
 

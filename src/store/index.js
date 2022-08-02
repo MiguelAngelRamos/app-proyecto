@@ -1,3 +1,5 @@
+import router from '@/router';
+import { authUser } from '@/utils/user-auth';
 import { createStore } from 'vuex'
 
 export default createStore({
@@ -38,17 +40,27 @@ export default createStore({
     }
    },
    async loginUsuario({commit}, usuario) {
-    console.log(usuario);
+    let existe;
+    // console.log(usuario);¡
     // *validaciones!!!
+    const usuarioLogeado = {
+      email: usuario.email,
+      password: usuario.password
+    };
     try {
       const response = await fetch('http://localhost:3000/users');
       const data = await response.json();
       console.log(data); // *El arreglo con el unico objeto que es el usuario
+      //* [{}]
+      existe = data.some(user => user.email === usuarioLogeado.email && user.password === usuarioLogeado.password);
+      console.log(existe);
+
     } catch (error) {
-      
+      throw error;
     }
-   
-    commit('setUsuario', usuario)
+    commit('setUsuario', usuarioLogeado)
+    authUser(existe);
+    router.push('/products')
    }
   },
   getters: {
