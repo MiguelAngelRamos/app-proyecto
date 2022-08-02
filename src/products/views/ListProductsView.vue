@@ -1,5 +1,4 @@
 <template>
-  <p>Esta es la Lista de los productos</p>
   <div class="container">
     <div class="row d-flex justify-content-between">
       <CardProducto v-for="producto of productos" :key="producto.id" :productoCard="producto"/>
