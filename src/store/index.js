@@ -6,7 +6,8 @@ export default createStore({
   state: {
     productos: [],
     productoObject: {},
-    usuario: null,
+    usuarioLogeado: null,
+    usuariosApi: []
   },
   mutations: {
     setProductos(state, payload) {
@@ -16,7 +17,10 @@ export default createStore({
       state.productoObject = payload;
     },
     setUsuario(state, payload) {
-      state.usuario = payload;
+      state.usuarioLogeado = payload;
+    },
+    setUsuariosApi(state, payload) {
+      state.usuariosApi = payload;
     }
   },
   actions: {
@@ -52,6 +56,7 @@ export default createStore({
       const data = await response.json();
       console.log(data); // *El arreglo con el unico objeto que es el usuario
       //* [{}]
+      commit('setUsuariosApi', data)
       existe = data.some(user => user.email === usuarioLogeado.email && user.password === usuarioLogeado.password);
       console.log(existe);
 
@@ -61,6 +66,23 @@ export default createStore({
     commit('setUsuario', usuarioLogeado)
     authUser(existe);
     router.push('/products')
+   },
+
+   async registroUsuario ({commit}, usuario) {
+      try {
+        await fetch('http://localhost:3000/users',{
+          method: 'POST',
+          body: JSON.stringify(usuario),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+    
+        router.push('/login')
+      } catch (error) {
+        throw error;
+      }
+    
    }
   },
   getters: {

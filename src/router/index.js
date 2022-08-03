@@ -9,7 +9,8 @@ const routes = [
   {
     path: '/login',
     name: 'my-login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
+    
   },
   {
     path: '/register',
@@ -49,13 +50,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   //* Vamos recorrer cada una de las rutas
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    let usuarioValido;
+    let usuarioValido = false;
     console.log('Ruta Protegida');
     // const usuario = isAuth(); //* puede ser verdadero o falso
     // console.log(usuario);
     //* Obtener la información del local storage
     let auth = localStorage.getItem('isAuth');
-    auth=='false'? usuarioValido = false: usuarioValido = true;
+    console.log('auth del localstorage' + auth);
+    auth=='false' || auth == null ? usuarioValido = false: usuarioValido = true;
     if(!usuarioValido) {
       next({path: '/login'})
     } else {
